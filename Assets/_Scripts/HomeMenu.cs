@@ -16,6 +16,22 @@ public class HomeMenu : MonoBehaviour {
 
     public void gameStart()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
+
+	public void Quit()
+	{
+		Application.Quit ();
+	}
+
+	public void Instruction()
+	{
+		SceneManager.LoadScene (1);
+	}
+
+	public void BackToMenu()
+	{
+		SceneManager.LoadScene (0);
+	}
 }
+

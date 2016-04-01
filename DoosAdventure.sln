@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{F164D014-4C34-A2D4-9806-1B4A0967AE0C}") = "DoosAdventure", "Assembly-CSharp.csproj", "{80F0BB20-F656-CC18-72F3-26A2CD9D29F2}"
+EndProject
+Project("{F164D014-4C34-A2D4-9806-1B4A0967AE0C}") = "DoosAdventure", "Assembly-CSharp-Editor.csproj", "{B5099A76-53E3-8D77-F8A9-8ACA0DC13FAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80F0BB20-F656-CC18-72F3-26A2CD9D29F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80F0BB20-F656-CC18-72F3-26A2CD9D29F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80F0BB20-F656-CC18-72F3-26A2CD9D29F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80F0BB20-F656-CC18-72F3-26A2CD9D29F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5099A76-53E3-8D77-F8A9-8ACA0DC13FAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5099A76-53E3-8D77-F8A9-8ACA0DC13FAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5099A76-53E3-8D77-F8A9-8ACA0DC13FAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5099A76-53E3-8D77-F8A9-8ACA0DC13FAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
