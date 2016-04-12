@@ -41,23 +41,15 @@ public class PlayerController : MonoBehaviour {
     public float moveForce;
     public float jumpForce;
     public Transform groundCheck;
-    public Text ScoreLabel;
 	public GameObject beamController;
 	public GameObject beamController2;
 	public GameObject beamPoint;
 
 
-    //Health states and scores
-    public int curHealth = 4;
-    public int maxHealth = 4;
-    public int score = 0;
     public bool canDoubleJump;
     //public Animation hurtAnim;
 
-
-    //Game over UI
-    public GameObject GameoverUI;
-    public GameObject GameClearUI;
+	public HUD hud;
 
     // PRIVATE Instance variables
     private Animator _animator;
@@ -68,18 +60,6 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D _rigidBody2d;
     private bool _isGrounded;
 	private bool _isTouchedSpring;
-
-    //Set audio variables
-    private AudioSource[] _audioSources;
-    private AudioSource _jumpSound;
-    private AudioSource _coinSound;
-    private AudioSource _powerUpSound;
-    private AudioSource _deadSound;
-    private AudioSource _hurtSound;
-    private AudioSource _gameover;
-    private AudioSource _backSound;
-    private AudioSource _gameClear;
-
 
 
     // Use this for initialization
@@ -95,21 +75,6 @@ public class PlayerController : MonoBehaviour {
         this._rigidBody2d = gameObject.GetComponent<Rigidbody2D>();
         this._move = 0f;
         this._facingRight = true;
-
-        this.curHealth = this.maxHealth;
-
-        // Setup AudioSources
-        this._audioSources = gameObject.GetComponents<AudioSource>();
-		this._coinSound = this._audioSources[0];
-		this._deadSound = this._audioSources[1];
-		this._gameClear = this._audioSources[2];
-		this._gameover = this._audioSources[3];
-		this._hurtSound = this._audioSources[4];
-		this._backSound = this._audioSources[5];
-        this._jumpSound = this._audioSources[6];
-        this._powerUpSound = this._audioSources[7];
-
-        this.GameoverUI.SetActive(false);
 
 		this._animator.SetBool("isTouchedSpring", false);
     }
@@ -197,7 +162,7 @@ public class PlayerController : MonoBehaviour {
 
                 }
             }
-            this._jumpSound.Play();
+			this.hud._audioSources [6].Play ();
         }
 
 		if (Input.GetKeyDown ("space")) {			
@@ -209,18 +174,7 @@ public class PlayerController : MonoBehaviour {
 				_beam2.transform.position = this.beamPoint.transform.position;
 			}
 		}
-
-        //this._checkBounds();
-
-        if (this.curHealth > this.maxHealth)
-        {
-            this.curHealth = this.maxHealth;
-        }
-
-        if(this.curHealth <= 0)
-        {
-            Die();
-        }
+			
     }
 
     private void _flip()
@@ -255,31 +209,31 @@ public class PlayerController : MonoBehaviour {
     {
         if(col.gameObject.CompareTag("Death"))
         {
-            this._deadSound.Play();       
+			this.hud._audioSources[1].Play();   
             this._transform.position = new Vector3(-363f, -736f, 0);
-            this.curHealth -= 1;
+			this.hud.curHealth -= 1;
         }
 
         if (col.gameObject.CompareTag("goldCoins"))
         {
            // Debug.Log("Touch the gold coin");
-            this._coinSound.Play();
+			this.hud._audioSources[0].Play();
             Destroy(col.gameObject);
-            this.score += 200;
+			this.hud.curScore += 200;
         }
 
         if (col.gameObject.CompareTag("bronzeCoins"))
         {
-            this._coinSound.Play();
+			this.hud._audioSources[0].Play();
             Destroy(col.gameObject);
-            this.score += 100;
+			this.hud.curScore += 100;
         }
 
 		if (col.gameObject.CompareTag("Star"))
 		{
-			this._coinSound.Play();
+			this.hud._audioSources[0].Play();
 			Destroy(col.gameObject);
-			this.score += 125;
+			this.hud.curScore += 125;
 		}
 
 		if (col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("FrogEnemy") || col.gameObject.CompareTag("GhostEnemy"))
@@ -292,32 +246,16 @@ public class PlayerController : MonoBehaviour {
 
         if (col.gameObject.CompareTag("final"))
         {
-            GameClear();
+			this.hud.GameClear ();
         }
     }
-
-    void Die()
-    {
-        this._backSound.Stop();
-        this._gameover.Play();
-        this.GameoverUI.SetActive(true);
-        this.ScoreLabel.text = "Score: " + this.score;
-        this.ScoreLabel.enabled = true;
-
-    }
-
-    void GameClear()
-    {
-        this._backSound.Stop();
-        this._gameClear.Play();
-        this.GameClearUI.SetActive(true);
-        
-    }
+		
 
     public void Damage(int dmg)
     {
-        this.curHealth -= dmg;
-        this._hurtSound.Play();
+		
+		this.hud.curHealth -= dmg;
+		this.hud._audioSources[4].Play();
         //gameObject.GetComponent<Animation>().Play("hurt");
     }
 
