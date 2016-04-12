@@ -11,6 +11,7 @@ Revision history: 0.0 - set up
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HUD : MonoBehaviour {
 
@@ -29,6 +30,7 @@ public class HUD : MonoBehaviour {
 	public int curScore = 0;
 	public int curHealth = 4;
 
+	public int curLevel = 1;
 
 	//Game over UI
 	public GameObject GameoverUI;
@@ -52,6 +54,9 @@ public class HUD : MonoBehaviour {
 	//Declare private variables
 	private string _txtScore;
 
+	void Awake() {
+		DontDestroyOnLoad(this);
+	}
 
 
 	// Use this for initialization
@@ -139,8 +144,21 @@ public class HUD : MonoBehaviour {
 	{
 		this._backSound.Stop();
 		this._gameClear.Play();
-		this.GameClearUI.SetActive(true);
-
+		//this.GameClearUI.SetActive(true);
+	
+		switch (curLevel) 
+		{
+			case 2:
+				SceneManager.LoadScene ("SecondLevel");
+				break;
+			case 3:
+				SceneManager.LoadScene ("ThirdLevel");
+				break;
+			case 1:	
+			default:
+				SceneManager.LoadScene ("Main");		
+				break;
+		}
 	}
 
 	public void Die()

@@ -246,6 +246,7 @@ public class PlayerController : MonoBehaviour {
 
         if (col.gameObject.CompareTag("final"))
         {
+			this.hud.curLevel = 2;
 			this.hud.GameClear ();
         }
     }
