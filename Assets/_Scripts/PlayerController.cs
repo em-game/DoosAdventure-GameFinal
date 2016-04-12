@@ -42,6 +42,9 @@ public class PlayerController : MonoBehaviour {
     public float jumpForce;
     public Transform groundCheck;
     public Text ScoreLabel;
+	public GameObject beamController;
+	public GameObject beamController2;
+	public GameObject beamPoint;
 
 
     //Health states and scores
@@ -59,10 +62,12 @@ public class PlayerController : MonoBehaviour {
     // PRIVATE Instance variables
     private Animator _animator;
     private float _move;
+	private float _jump;
     private bool _facingRight;
     private Transform _transform;
     private Rigidbody2D _rigidBody2d;
     private bool _isGrounded;
+	private bool _isTouchedSpring;
 
     //Set audio variables
     private AudioSource[] _audioSources;
@@ -95,16 +100,18 @@ public class PlayerController : MonoBehaviour {
 
         // Setup AudioSources
         this._audioSources = gameObject.GetComponents<AudioSource>();
-        this._jumpSound = this._audioSources[0];
-        this._powerUpSound = this._audioSources[1];
-        this._deadSound = this._audioSources[2];
-        this._hurtSound = this._audioSources[3];
-        this._coinSound = this._audioSources[4];
-        this._gameover = this._audioSources[5];
-        this._backSound = this._audioSources[6];
-        this._gameClear = this._audioSources[7];
+		this._coinSound = this._audioSources[0];
+		this._deadSound = this._audioSources[1];
+		this._gameClear = this._audioSources[2];
+		this._gameover = this._audioSources[3];
+		this._hurtSound = this._audioSources[4];
+		this._backSound = this._audioSources[5];
+        this._jumpSound = this._audioSources[6];
+        this._powerUpSound = this._audioSources[7];
 
         this.GameoverUI.SetActive(false);
+
+		this._animator.SetBool("isTouchedSpring", false);
     }
 
     // Update is called once per frame
@@ -116,15 +123,24 @@ public class PlayerController : MonoBehaviour {
                             this.groundCheck.position, 
                             1 << LayerMask.NameToLayer("Ground"));
 
+		this._isTouchedSpring = Physics2D.Linecast(
+							this._transform.position, 
+							this.groundCheck.position, 
+							1 << LayerMask.NameToLayer("Spring"));
+
+	//	Debug.Log ("is touched spring?: " + this._isTouchedSpring);
+
         //get absolute value of velocity for game object
         float VelX = this._rigidBody2d.velocity.x;
         float VelY = this._rigidBody2d.velocity.y;
 
         this._animator.SetBool("isGrounded", this._isGrounded);
+		this._animator.SetBool("isTouchedSpring", this._isTouchedSpring);
         this._animator.SetFloat("Speed", Mathf.Abs(this._rigidBody2d.velocity.x));
 
 
         this._move = Input.GetAxis("Horizontal");
+		this._jump = Input.GetAxis("Vertical");
    
         //Move the player
         this._rigidBody2d.AddForce((Vector2.right * this.moveForce) * this._move);
@@ -162,7 +178,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         //Jump 
-        if (Input.GetButtonDown("Jump"))
+		if (this._jump > 0)
         {
 
 
@@ -182,9 +198,17 @@ public class PlayerController : MonoBehaviour {
                 }
             }
             this._jumpSound.Play();
-
-
         }
+
+		if (Input.GetKeyDown ("space")) {			
+			if (this._facingRight) {
+				GameObject _beam = (GameObject)Instantiate (this.beamController);
+				_beam.transform.position = this.beamPoint.transform.position;
+			} else {
+				GameObject _beam2 = (GameObject)Instantiate (this.beamController2);
+				_beam2.transform.position = this.beamPoint.transform.position;
+			}
+		}
 
         //this._checkBounds();
 
@@ -232,13 +256,13 @@ public class PlayerController : MonoBehaviour {
         if(col.gameObject.CompareTag("Death"))
         {
             this._deadSound.Play();       
-            this._transform.position = new Vector3(-133.9f, -157.4f, 0);
+            this._transform.position = new Vector3(-363f, -736f, 0);
             this.curHealth -= 1;
         }
 
         if (col.gameObject.CompareTag("goldCoins"))
         {
-            Debug.Log("Touch the gold coin");
+           // Debug.Log("Touch the gold coin");
             this._coinSound.Play();
             Destroy(col.gameObject);
             this.score += 200;
@@ -251,7 +275,14 @@ public class PlayerController : MonoBehaviour {
             this.score += 100;
         }
 
-        if (col.gameObject.CompareTag("Enemy"))
+		if (col.gameObject.CompareTag("Star"))
+		{
+			this._coinSound.Play();
+			Destroy(col.gameObject);
+			this.score += 125;
+		}
+
+		if (col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("FrogEnemy") || col.gameObject.CompareTag("GhostEnemy"))
         {
             Destroy(col.gameObject);
             this.Damage(1);

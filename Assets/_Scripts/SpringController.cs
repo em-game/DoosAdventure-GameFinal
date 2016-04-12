@@ -16,10 +16,13 @@ public class SpringController : MonoBehaviour {
 
     //Declare public variables
     public float BounceForce = 5f;
+	public Transform groundCheck;
 
     public PlayerController _Player;
     private Animator _animator;
     private Transform _transform;
+	private Animator _playerAni;
+	private bool _isGrounded;
 
     // Use this for initialization
     void Start () {
@@ -28,17 +31,30 @@ public class SpringController : MonoBehaviour {
         //set private instance variables
         this._animator = gameObject.GetComponent<Animator>();
         this._transform = gameObject.GetComponent<Transform>();
+		this._playerAni = _Player.GetComponents<Animator> ()[0];
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
+		this._isGrounded = Physics2D.Linecast(
+			this._Player.transform.position, 
+			this.groundCheck.position, 
+			1 << LayerMask.NameToLayer("Ground"));
+		
+		this._animator.SetBool("isGrounded", _isGrounded);
+
+		if(_isGrounded)
+			this._animator.SetBool("isTouchedSpring", false);	
+		
 	}
 
     void OnTriggerEnter2D(Collider2D col)
     {
         Debug.Log("Touch the spring");
         this._animator.SetBool("isHit", true);
+
+		this._playerAni.SetBool ("isTouchedSpring", true);
 
         if (col.CompareTag("Player"))
         {
@@ -58,8 +74,16 @@ public class SpringController : MonoBehaviour {
                 StartCoroutine(this._Player.Knockback(0.02f, BounceForce, this._Player.transform.position, -400));
             }
 
+			StartCoroutine (_springBack (_animator));
             //this._animator.SetBool("isHit", false);
         }
     }
 
+
+	IEnumerator _springBack(Animator spring)
+	{
+		yield return new WaitForSeconds (1.3f);
+
+		spring.SetBool("isHit", false);
+	}
 }
