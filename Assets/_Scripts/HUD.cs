@@ -15,6 +15,9 @@ using UnityEngine.SceneManagement;
 
 public class HUD : MonoBehaviour {
 
+	public static HUD Instance;
+
+
 	//Declare public vairables
 	public Sprite[] HeartSprites;
 	public Image HeartUI_1;
@@ -54,15 +57,24 @@ public class HUD : MonoBehaviour {
 	//Declare private variables
 	private string _txtScore;
 
-	void Awake() {
-		DontDestroyOnLoad(this);
+	void Awake()
+	{
+		if (Instance == null)
+			Instance = this;
+
+		if (Instance != this)
+			Destroy (gameObject);
 	}
 
 
 	// Use this for initialization
 	void Start () {
-		this.curHealth = this.maxHealth;
-		this.curScore = 0;
+
+
+		this.curHealth = GlobalControl.Instance.Live;
+		this.curLevel = GlobalControl.Instance.Level;
+		this.curScore = GlobalControl.Instance.Score;
+
 
 		// Setup AudioSources
 		//this._audioSources = gameObject.GetComponents<AudioSource>();
@@ -81,6 +93,10 @@ public class HUD : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		//this.curHealth = GlobalControl.Instance.Live;
+		//this.curScore = GlobalControl.Instance.Score;
+
+
 		this.DrawHUD(this.curHealth);
 		this.DrawScore(this.curScore);
 
@@ -89,9 +105,8 @@ public class HUD : MonoBehaviour {
 			this.curHealth = this.maxHealth;
 		}
 
-		if(this.curHealth <= 0)
-		{
-			Die();
+		if (this.curHealth <= 0) {
+			Die ();
 		}
 	}
 
@@ -145,13 +160,17 @@ public class HUD : MonoBehaviour {
 		this._backSound.Stop();
 		this._gameClear.Play();
 		//this.GameClearUI.SetActive(true);
-	
+
+		//this.curLevel += 1;
+
 		switch (curLevel) 
 		{
-			case 2:
+		case 2:
+				this.SaveData ();
 				SceneManager.LoadScene ("SecondLevel");
 				break;
-			case 3:
+		case 3:
+				this.SaveData ();	
 				SceneManager.LoadScene ("ThirdLevel");
 				break;
 			case 1:	
@@ -169,5 +188,12 @@ public class HUD : MonoBehaviour {
 		this.lblScore.text = "Score: " + this.curScore;
 		this.lblScore.enabled = true;
 
+	}
+		
+	public void SaveData()
+	{
+		GlobalControl.Instance.Score = this.curScore;
+		GlobalControl.Instance.Live = this.curHealth;
+		GlobalControl.Instance.Level = this.curLevel;
 	}
 }

@@ -42,23 +42,17 @@ public class SpringController : MonoBehaviour {
 			this.groundCheck.position, 
 			1 << LayerMask.NameToLayer("Ground"));
 		
-		this._animator.SetBool("isGrounded", _isGrounded);
+		this._playerAni.SetBool("isGrounded", _isGrounded);
 
-		if(_isGrounded)
-			this._animator.SetBool("isTouchedSpring", false);	
-		
 	}
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("Touch the spring");
-        this._animator.SetBool("isHit", true);
-
-		this._playerAni.SetBool ("isTouchedSpring", true);
 
         if (col.CompareTag("Player"))
         {
-            Debug.Log(this._transform.eulerAngles.z);
+            
+			this._animator.SetBool("isHit", true);
 
             //if spring is facing left, player will jump in the left way
             if (this._transform.eulerAngles.z < 300)
