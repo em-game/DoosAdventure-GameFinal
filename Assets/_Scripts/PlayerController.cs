@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+		
         //Initialize public instance variables
         this.velocityRange = new VelocityRange(300f, 10000f);
         
@@ -88,10 +89,6 @@ public class PlayerController : MonoBehaviour {
                             this.groundCheck.position, 
                             1 << LayerMask.NameToLayer("Ground"));
 
-		this._isTouchedSpring = Physics2D.Linecast(
-							this._transform.position, 
-							this.groundCheck.position, 
-							1 << LayerMask.NameToLayer("Spring"));
 
 	//	Debug.Log ("is touched spring?: " + this._isTouchedSpring);
 
@@ -100,7 +97,6 @@ public class PlayerController : MonoBehaviour {
         float VelY = this._rigidBody2d.velocity.y;
 
         this._animator.SetBool("isGrounded", this._isGrounded);
-		this._animator.SetBool("isTouchedSpring", this._isTouchedSpring);
         this._animator.SetFloat("Speed", Mathf.Abs(this._rigidBody2d.velocity.x));
 
 

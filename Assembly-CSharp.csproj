@@ -55,6 +55,7 @@
      <Compile Include="Assets\_Scripts\FrogController.cs" />
      <Compile Include="Assets\_Scripts\GhostAI.cs" />
      <Compile Include="Assets\_Scripts\GhostController.cs" />
+     <Compile Include="Assets\_Scripts\GlobalControl.cs" />
      <Compile Include="Assets\_Scripts\HUD.cs" />
      <Compile Include="Assets\_Scripts\HomeMenu.cs" />
      <Compile Include="Assets\_Scripts\Menu.cs" />
