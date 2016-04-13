@@ -16,7 +16,7 @@ public class StarController : MonoBehaviour {
 	// Update is called once per frame
 	void Points () {
 		for (int i = 0; i < starPoints.Length; i++) {
-			int starCount = Random.Range (0, 2);
+			int starCount = Random.Range (0, 3);
 			if (starCount > 0)
 				Instantiate (star, starPoints [i].position, Quaternion.identity);
 		}
