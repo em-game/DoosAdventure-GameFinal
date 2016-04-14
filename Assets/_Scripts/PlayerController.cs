@@ -26,6 +26,7 @@ public class VelocityRange
     public float minimum;
     public float maximum;
 
+
     // Constructor
     public VelocityRange(float minimum, float maximum)
     {
@@ -44,7 +45,10 @@ public class PlayerController : MonoBehaviour {
 	public GameObject beamController;
 	public GameObject beamController2;
 	public GameObject beamPoint;
-
+	public float startPointX;
+	public float startPointY;
+	public Text respawnMessage;
+	public Text fakeMessage;
 
     public bool canDoubleJump;
     //public Animation hurtAnim;
@@ -60,12 +64,20 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D _rigidBody2d;
     private bool _isGrounded;
 	private bool _isTouchedSpring;
+	private bool scenceCheck;
+
 
 
     // Use this for initialization
     void Start()
     {
-		
+		if (Application.loadedLevelName != "Main") {
+			this.scenceCheck = true;
+		}
+
+		this.respawnMessage.gameObject.SetActive (false);
+		this.fakeMessage.gameObject.SetActive (false);
+
         //Initialize public instance variables
         this.velocityRange = new VelocityRange(300f, 10000f);
         
@@ -77,8 +89,12 @@ public class PlayerController : MonoBehaviour {
         this._move = 0f;
         this._facingRight = true;
 
+
+
 		this._animator.SetBool("isTouchedSpring", false);
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -161,16 +177,17 @@ public class PlayerController : MonoBehaviour {
 			this.hud._audioSources [6].Play ();
         }
 
-		if (Input.GetKeyDown ("space")) {			
-			if (this._facingRight) {
-				GameObject _beam = (GameObject)Instantiate (this.beamController);
-				_beam.transform.position = this.beamPoint.transform.position;
-			} else {
-				GameObject _beam2 = (GameObject)Instantiate (this.beamController2);
-				_beam2.transform.position = this.beamPoint.transform.position;
+		if (this.scenceCheck) {
+			if (Input.GetKeyDown ("space")) {			
+				if (this._facingRight) {
+					GameObject _beam = (GameObject)Instantiate (this.beamController);
+					_beam.transform.position = this.beamPoint.transform.position;
+				} else {
+					GameObject _beam2 = (GameObject)Instantiate (this.beamController2);
+					_beam2.transform.position = this.beamPoint.transform.position;
+				}
 			}
 		}
-			
     }
 
     private void _flip()
@@ -200,13 +217,22 @@ public class PlayerController : MonoBehaviour {
             this._transform.position = new Vector3(1445.2f, this._transform.position.y, 0);
         }
     }
+	void OnTriggerEnter2D(Collider2D other){
+		if (other.gameObject.CompareTag("Respawn"))
+		{
+			this.startPointX = -966;
+			this.startPointY = -283;
+			this.respawnMessage.gameObject.SetActive (true);
+			Invoke ("offAlarm",3f);
+		}
+	}
 
     void OnCollisionEnter2D(Collision2D col)
     {
         if(col.gameObject.CompareTag("Death"))
         {
 			this.hud._audioSources[1].Play();   
-            this._transform.position = new Vector3(-363f, -736f, 0);
+			this._transform.position = new Vector3(this.startPointX, this.startPointY, 0);
 			this.hud.curHealth -= 1;
         }
 
@@ -245,7 +271,26 @@ public class PlayerController : MonoBehaviour {
 			this.hud.curLevel = 2;
 			this.hud.GameClear ();
         }
+
+		if (col.gameObject.CompareTag("Finish"))
+		{
+			this.hud.curLevel = 3;
+			this.hud.GameClear ();
+		}
+
+		if (col.gameObject.CompareTag("FakeFinish"))
+		{
+			this._transform.position = new Vector3(939f, -1071f, 0);
+			this.fakeMessage.gameObject.SetActive (true);
+			Invoke ("offAlarm",3f);
+		}
     }
+
+
+	private void offAlarm(){
+		this.respawnMessage.gameObject.SetActive (false);
+		this.fakeMessage.gameObject.SetActive (false);
+	}
 		
 
     public void Damage(int dmg)
