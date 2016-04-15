@@ -49,8 +49,9 @@ public class HUD : MonoBehaviour {
 	private AudioSource _gameover;
 	private AudioSource _backSound;
 	private AudioSource _gameClear;
-
-
+	private AudioSource _starSound;
+	private AudioSource _frogSound;
+	private AudioSource _ghostSound;
 
 	public PlayerController _Player;
 
@@ -86,6 +87,9 @@ public class HUD : MonoBehaviour {
 		this._backSound = this._audioSources[5];
 		this._jumpSound = this._audioSources[6];
 		this._powerUpSound = this._audioSources[7];
+		this._starSound = this._audioSources [8];
+		this._frogSound = this._audioSources [9];
+		this._ghostSound = this._audioSources [10];
 
 		this.GameoverUI.SetActive(false);
 	}

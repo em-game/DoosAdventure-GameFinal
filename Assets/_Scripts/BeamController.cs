@@ -7,14 +7,11 @@ public class BeamController : MonoBehaviour {
 	public float speed;
 	public GameObject Explosion;
 
-
-
-	//GameObject scoreUI;
+	GameObject Hud;
 
 	// Use this for initialization
 	void Start () {
-		
-		
+		Hud = GameObject.FindWithTag ("HUD");
 	}
 	
 	// Update is called once per frame
@@ -23,7 +20,6 @@ public class BeamController : MonoBehaviour {
 		Vector2 position = transform.position;
 
 		position = new Vector2 (position.x + this.speed, position.y);
-		//Debug.Log ("here :"+position.y);
 		transform.position = position;
 
 	
@@ -42,15 +38,20 @@ public class BeamController : MonoBehaviour {
 
 		if (other.gameObject.CompareTag ("Star")) {
 			Destroy (gameObject);
+
 		}
 
 		if (other.gameObject.CompareTag ("FrogEnemy")) {
+			Hud.GetComponent<HUD> ().curScore += 85;
+			Hud.GetComponent<HUD> ()._audioSources [9].Play ();
 			PlayExplosion ();
 			Destroy (other.gameObject);
 			Destroy (gameObject);
 		}
 
 		if (other.gameObject.CompareTag ("GhostEnemy")) {
+			Hud.GetComponent<HUD> ().curScore += 75;
+			Hud.GetComponent<HUD> ()._audioSources [10].Play ();
 			PlayExplosion ();
 			Destroy (other.gameObject);
 			Destroy (gameObject);

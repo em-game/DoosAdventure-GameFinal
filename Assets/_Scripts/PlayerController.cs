@@ -253,7 +253,7 @@ public class PlayerController : MonoBehaviour {
 
 		if (col.gameObject.CompareTag("Star"))
 		{
-			this.hud._audioSources[0].Play();
+			this.hud._audioSources[8].Play();
 			Destroy(col.gameObject);
 			this.hud.curScore += 125;
 		}
