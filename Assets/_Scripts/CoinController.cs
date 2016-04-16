@@ -21,6 +21,8 @@ public class CoinController : MonoBehaviour
     public int horizontalMax = 1400;
 
     private GameObject coin;
+
+
     private Vector2 _originPosition;
     private int _coinType;
 
@@ -44,26 +46,41 @@ public class CoinController : MonoBehaviour
             case 2:
                 coin = GameObject.Find("coin_gold");
                 break;
+
         }
     }
 
     void Spawn()
     {
-        for (int i = 0; i < maxCoins; i++)
-        {
+		if (Application.loadedLevelName != "ThirdLevel") {
+			for (int i = 0; i < maxCoins; i++) {
             
-            Vector2 randomPosition = new Vector2(Random.Range(horizontalMin, horizontalMax), Random.Range(verticalMin, verticalMax));
+				Vector2 randomPosition = new Vector2 (Random.Range (horizontalMin, horizontalMax), Random.Range (verticalMin, verticalMax));
 
-            //Choose the platform randomly
-            this._coinType = Random.Range(1, 3);
-            this.ChooseCoin(this._coinType);
+				//Choose the platform randomly
+				this._coinType = Random.Range (1, 3);
+				
+				this.ChooseCoin (this._coinType);
 
-            //Create platform
-            Instantiate(coin, randomPosition, Quaternion.identity);
 
-            this._originPosition = randomPosition;
+				//Create platform
+				Instantiate (coin, randomPosition, Quaternion.identity);
 
-        }
+				this._originPosition = randomPosition;
+
+			}
+		}else {
+			for (int i = 0; i < maxCoins; i++) {
+				Vector2 randomPosition = new Vector2 (Random.Range (horizontalMin, horizontalMax), Random.Range (verticalMin, verticalMax));
+
+				coin = GameObject.FindWithTag ("iceBar");
+
+				Instantiate (coin, randomPosition, Quaternion.identity);
+				this._originPosition = randomPosition;
+			}
+		}
+		 
+
     }
 
 }

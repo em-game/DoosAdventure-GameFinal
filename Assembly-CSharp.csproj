@@ -47,6 +47,10 @@
   <ItemGroup>
      <Compile Include="Assets\_Scripts\BeamController.cs" />
      <Compile Include="Assets\_Scripts\BeamController2.cs" />
+     <Compile Include="Assets\_Scripts\Boss_script\BossBullet.cs" />
+     <Compile Include="Assets\_Scripts\Boss_script\BossGun.cs" />
+     <Compile Include="Assets\_Scripts\Boss_script\BossHeart.cs" />
+     <Compile Include="Assets\_Scripts\Boss_script\BossMove.cs" />
      <Compile Include="Assets\_Scripts\CameraFollow.cs" />
      <Compile Include="Assets\_Scripts\CoinController.cs" />
      <Compile Include="Assets\_Scripts\ExplosionController.cs" />

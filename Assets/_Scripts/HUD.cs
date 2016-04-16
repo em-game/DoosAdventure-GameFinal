@@ -25,6 +25,8 @@ public class HUD : MonoBehaviour {
 	public Image HeartUI_3;
 	public Image HeartUI_4;
 	public Text lblScore;
+	public Text lblBossHeart;
+	public Text gameOverScore;
 
 	//Health states and scores
 
@@ -34,6 +36,8 @@ public class HUD : MonoBehaviour {
 	public int curHealth = 4;
 
 	public int curLevel = 1;
+
+	public int curBossHeart;
 
 	//Game over UI
 	public GameObject GameoverUI;
@@ -57,6 +61,8 @@ public class HUD : MonoBehaviour {
 
 	//Declare private variables
 	private string _txtScore;
+	private string _txtBossHeart;
+
 
 	void Awake()
 	{
@@ -71,7 +77,7 @@ public class HUD : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
+		this.curBossHeart = 10;
 		this.curHealth = GlobalControl.Instance.Live;
 		this.curLevel = GlobalControl.Instance.Level;
 		this.curScore = GlobalControl.Instance.Score;
@@ -92,6 +98,11 @@ public class HUD : MonoBehaviour {
 		this._ghostSound = this._audioSources [10];
 
 		this.GameoverUI.SetActive(false);
+
+		if (Application.loadedLevelName == "ThirdLevel") {
+			this.lblBossHeart.gameObject.SetActive(true);
+		}
+
 	}
 
 	// Update is called once per frame
@@ -104,13 +115,18 @@ public class HUD : MonoBehaviour {
 		this.DrawHUD(this.curHealth);
 		this.DrawScore(this.curScore);
 
-		if (this.curHealth > this.maxHealth)
-		{
-			this.curHealth = this.maxHealth;
-		}
+		this.DrawBossHeart (this.curBossHeart);
+
+
+			
+
 
 		if (this.curHealth <= 0) {
 			Die ();
+		}
+
+		if (this.curBossHeart <= 0) {
+			this.GameClearUI.SetActive(true);
 		}
 	}
 
@@ -159,6 +175,12 @@ public class HUD : MonoBehaviour {
 		this.lblScore.text = this._txtScore;
 	}
 
+	void DrawBossHeart(int curBossHeart)
+	{
+		this._txtBossHeart = "Boss Heart: " + this.curBossHeart;
+		this.lblBossHeart.text = this._txtBossHeart;
+	}
+
 	public void GameClear()
 	{
 		this._backSound.Stop();
@@ -189,8 +211,9 @@ public class HUD : MonoBehaviour {
 		this._backSound.Stop();
 		this._gameover.Play();
 		this.GameoverUI.SetActive(true);
-		this.lblScore.text = "Score: " + this.curScore;
-		this.lblScore.enabled = true;
+		this.gameOverScore.text = "Score: " + this.curScore;
+		this.gameOverScore.enabled = true;
+		this.lblBossHeart.enabled = false;
 
 	}
 		
