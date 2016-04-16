@@ -26,6 +26,7 @@ public class VelocityRange
     public float minimum;
     public float maximum;
 
+
     // Constructor
     public VelocityRange(float minimum, float maximum)
     {
@@ -41,45 +42,42 @@ public class PlayerController : MonoBehaviour {
     public float moveForce;
     public float jumpForce;
     public Transform groundCheck;
-    public Text ScoreLabel;
+	public GameObject beamController;
+	public GameObject beamController2;
+	public GameObject beamPoint;
+	public float startPointX;
+	public float startPointY;
+	public Text respawnMessage;
+	public Text fakeMessage;
 
-
-    //Health states and scores
-    public int curHealth = 4;
-    public int maxHealth = 4;
-    public int score = 0;
     public bool canDoubleJump;
     //public Animation hurtAnim;
 
-
-    //Game over UI
-    public GameObject GameoverUI;
-    public GameObject GameClearUI;
+	public HUD hud;
 
     // PRIVATE Instance variables
     private Animator _animator;
     private float _move;
+	private float _jump;
     private bool _facingRight;
     private Transform _transform;
     private Rigidbody2D _rigidBody2d;
     private bool _isGrounded;
-
-    //Set audio variables
-    private AudioSource[] _audioSources;
-    private AudioSource _jumpSound;
-    private AudioSource _coinSound;
-    private AudioSource _powerUpSound;
-    private AudioSource _deadSound;
-    private AudioSource _hurtSound;
-    private AudioSource _gameover;
-    private AudioSource _backSound;
-    private AudioSource _gameClear;
+	private bool _isTouchedSpring;
+	private bool scenceCheck;
 
 
 
     // Use this for initialization
     void Start()
     {
+		if (Application.loadedLevelName != "Main") {
+			this.scenceCheck = true;
+		}
+
+		this.respawnMessage.gameObject.SetActive (false);
+		this.fakeMessage.gameObject.SetActive (false);
+
         //Initialize public instance variables
         this.velocityRange = new VelocityRange(300f, 10000f);
         
@@ -91,21 +89,12 @@ public class PlayerController : MonoBehaviour {
         this._move = 0f;
         this._facingRight = true;
 
-        this.curHealth = this.maxHealth;
 
-        // Setup AudioSources
-        this._audioSources = gameObject.GetComponents<AudioSource>();
-        this._jumpSound = this._audioSources[0];
-        this._powerUpSound = this._audioSources[1];
-        this._deadSound = this._audioSources[2];
-        this._hurtSound = this._audioSources[3];
-        this._coinSound = this._audioSources[4];
-        this._gameover = this._audioSources[5];
-        this._backSound = this._audioSources[6];
-        this._gameClear = this._audioSources[7];
 
-        this.GameoverUI.SetActive(false);
+		this._animator.SetBool("isTouchedSpring", false);
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -116,6 +105,9 @@ public class PlayerController : MonoBehaviour {
                             this.groundCheck.position, 
                             1 << LayerMask.NameToLayer("Ground"));
 
+
+	//	Debug.Log ("is touched spring?: " + this._isTouchedSpring);
+
         //get absolute value of velocity for game object
         float VelX = this._rigidBody2d.velocity.x;
         float VelY = this._rigidBody2d.velocity.y;
@@ -125,6 +117,7 @@ public class PlayerController : MonoBehaviour {
 
 
         this._move = Input.GetAxis("Horizontal");
+		this._jump = Input.GetAxis("Vertical");
    
         //Move the player
         this._rigidBody2d.AddForce((Vector2.right * this.moveForce) * this._move);
@@ -162,7 +155,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         //Jump 
-        if (Input.GetButtonDown("Jump"))
+		if (this._jump > 0)
         {
 
 
@@ -181,22 +174,20 @@ public class PlayerController : MonoBehaviour {
 
                 }
             }
-            this._jumpSound.Play();
-
-
+			this.hud._audioSources [6].Play ();
         }
 
-        //this._checkBounds();
-
-        if (this.curHealth > this.maxHealth)
-        {
-            this.curHealth = this.maxHealth;
-        }
-
-        if(this.curHealth <= 0)
-        {
-            Die();
-        }
+		if (this.scenceCheck) {
+			if (Input.GetKeyDown ("space")) {			
+				if (this._facingRight) {
+					GameObject _beam = (GameObject)Instantiate (this.beamController);
+					_beam.transform.position = this.beamPoint.transform.position;
+				} else {
+					GameObject _beam2 = (GameObject)Instantiate (this.beamController2);
+					_beam2.transform.position = this.beamPoint.transform.position;
+				}
+			}
+		}
     }
 
     private void _flip()
@@ -226,32 +217,48 @@ public class PlayerController : MonoBehaviour {
             this._transform.position = new Vector3(1445.2f, this._transform.position.y, 0);
         }
     }
+	void OnTriggerEnter2D(Collider2D other){
+		if (other.gameObject.CompareTag("Respawn"))
+		{
+			this.startPointX = -966;
+			this.startPointY = -283;
+			this.respawnMessage.gameObject.SetActive (true);
+			Invoke ("offAlarm",3f);
+		}
+	}
 
     void OnCollisionEnter2D(Collision2D col)
     {
         if(col.gameObject.CompareTag("Death"))
         {
-            this._deadSound.Play();       
-            this._transform.position = new Vector3(-133.9f, -157.4f, 0);
-            this.curHealth -= 1;
+			this.hud._audioSources[1].Play();   
+			this._transform.position = new Vector3(this.startPointX, this.startPointY, 0);
+			this.hud.curHealth -= 1;
         }
 
         if (col.gameObject.CompareTag("goldCoins"))
         {
-            Debug.Log("Touch the gold coin");
-            this._coinSound.Play();
+           // Debug.Log("Touch the gold coin");
+			this.hud._audioSources[0].Play();
             Destroy(col.gameObject);
-            this.score += 200;
+			this.hud.curScore += 200;
         }
 
         if (col.gameObject.CompareTag("bronzeCoins"))
         {
-            this._coinSound.Play();
+			this.hud._audioSources[0].Play();
             Destroy(col.gameObject);
-            this.score += 100;
+			this.hud.curScore += 100;
         }
 
-        if (col.gameObject.CompareTag("Enemy"))
+		if (col.gameObject.CompareTag("Star"))
+		{
+			this.hud._audioSources[8].Play();
+			Destroy(col.gameObject);
+			this.hud.curScore += 125;
+		}
+
+		if (col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("FrogEnemy") || col.gameObject.CompareTag("GhostEnemy"))
         {
             Destroy(col.gameObject);
             this.Damage(1);
@@ -261,32 +268,36 @@ public class PlayerController : MonoBehaviour {
 
         if (col.gameObject.CompareTag("final"))
         {
-            GameClear();
+			this.hud.curLevel = 2;
+			this.hud.GameClear ();
         }
+
+		if (col.gameObject.CompareTag("Finish"))
+		{
+			this.hud.curLevel = 3;
+			this.hud.GameClear ();
+		}
+
+		if (col.gameObject.CompareTag("FakeFinish"))
+		{
+			this._transform.position = new Vector3(939f, -1071f, 0);
+			this.fakeMessage.gameObject.SetActive (true);
+			Invoke ("offAlarm",3f);
+		}
     }
 
-    void Die()
-    {
-        this._backSound.Stop();
-        this._gameover.Play();
-        this.GameoverUI.SetActive(true);
-        this.ScoreLabel.text = "Score: " + this.score;
-        this.ScoreLabel.enabled = true;
 
-    }
-
-    void GameClear()
-    {
-        this._backSound.Stop();
-        this._gameClear.Play();
-        this.GameClearUI.SetActive(true);
-        
-    }
+	private void offAlarm(){
+		this.respawnMessage.gameObject.SetActive (false);
+		this.fakeMessage.gameObject.SetActive (false);
+	}
+		
 
     public void Damage(int dmg)
     {
-        this.curHealth -= dmg;
-        this._hurtSound.Play();
+		
+		this.hud.curHealth -= dmg;
+		this.hud._audioSources[4].Play();
         //gameObject.GetComponent<Animation>().Play("hurt");
     }
 
