@@ -54,13 +54,14 @@ public class Menu : MonoBehaviour {
     public void Restart()
     {
         //Application.LoadLevel(Application.loadedLevel);
-
-        SceneManager.LoadScene("Main");
+		Debug.Log("here");
+        SceneManager.LoadScene(2);
     }
 
     public void MainMenu()
     {
         //Application.LoadLevel(0);
+
         SceneManager.LoadScene(0);
     }
 
