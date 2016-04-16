@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour {
 	public float startPointY;
 	public Text respawnMessage;
 	public Text fakeMessage;
+	public float cheatKeyX;
+	public float cheatKeyY;
 
     public bool canDoubleJump;
     //public Animation hurtAnim;
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour {
     private Animator _animator;
     private float _move;
 	private float _jump;
+	private float _cheat;
     private bool _facingRight;
     private Transform _transform;
     private Rigidbody2D _rigidBody2d;
@@ -73,10 +76,15 @@ public class PlayerController : MonoBehaviour {
     {
 		if (Application.loadedLevelName != "Main") {
 			this.scenceCheck = true;
+		} else {
+			this.hud.curHealth = 4;
+			this.hud.curScore = 0;
+			this.hud.curLevel = 1;
 		}
 
 		this.respawnMessage.gameObject.SetActive (false);
 		this.fakeMessage.gameObject.SetActive (false);
+
 
         //Initialize public instance variables
         this.velocityRange = new VelocityRange(300f, 10000f);
@@ -118,7 +126,8 @@ public class PlayerController : MonoBehaviour {
 
         this._move = Input.GetAxis("Horizontal");
 		this._jump = Input.GetAxis("Vertical");
-   
+		this._cheat = Input.GetAxis ("Cheat");
+
         //Move the player
         this._rigidBody2d.AddForce((Vector2.right * this.moveForce) * this._move);
 
@@ -157,8 +166,6 @@ public class PlayerController : MonoBehaviour {
         //Jump 
 		if (this._jump > 0)
         {
-
-
             if(this._isGrounded)
             {
                 this._rigidBody2d.AddForce(Vector2.up * this.jumpForce);
@@ -187,6 +194,10 @@ public class PlayerController : MonoBehaviour {
 					_beam2.transform.position = this.beamPoint.transform.position;
 				}
 			}
+		}
+
+		if (this._cheat > 0) {
+			this._transform.position = new Vector2(this.cheatKeyX, this.cheatKeyY);
 		}
     }
 
@@ -280,9 +291,22 @@ public class PlayerController : MonoBehaviour {
 
 		if (col.gameObject.CompareTag("FakeFinish"))
 		{
-			this._transform.position = new Vector3(939f, -1071f, 0);
+			this._transform.position = new Vector2(939f, -1071f);
 			this.fakeMessage.gameObject.SetActive (true);
 			Invoke ("offAlarm",3f);
+		}
+
+		if (col.gameObject.CompareTag("BossBullet"))
+		{
+			this.Damage(1);
+			Destroy (col.gameObject);
+		}
+
+		if (col.gameObject.CompareTag("iceBar"))
+		{
+			
+			this.hud.curHealth += 1;
+			Destroy (col.gameObject);
 		}
     }
 
