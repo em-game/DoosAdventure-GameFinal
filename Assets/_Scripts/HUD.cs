@@ -56,6 +56,8 @@ public class HUD : MonoBehaviour {
 	private AudioSource _starSound;
 	private AudioSource _frogSound;
 	private AudioSource _ghostSound;
+	private bool _paused;
+
 
 	public PlayerController _Player;
 
@@ -115,10 +117,7 @@ public class HUD : MonoBehaviour {
 		this.DrawHUD(this.curHealth);
 		this.DrawScore(this.curScore);
 
-		this.DrawBossHeart (this.curBossHeart);
-
-
-			
+		this.DrawBossHeart (this.curBossHeart);		
 
 
 		if (this.curHealth <= 0) {
@@ -208,13 +207,13 @@ public class HUD : MonoBehaviour {
 
 	public void Die()
 	{
+		this._paused = true;		
 		this._backSound.Stop();
 		this._gameover.Play();
 		this.GameoverUI.SetActive(true);
 		this.gameOverScore.text = "Score: " + this.curScore;
 		this.gameOverScore.enabled = true;
 		this.lblBossHeart.enabled = false;
-
 	}
 		
 	public void SaveData()
@@ -223,4 +222,5 @@ public class HUD : MonoBehaviour {
 		GlobalControl.Instance.Live = this.curHealth;
 		GlobalControl.Instance.Level = this.curLevel;
 	}
+
 }
