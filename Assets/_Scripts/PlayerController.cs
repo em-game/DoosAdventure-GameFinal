@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-		
+
         this._isGrounded = Physics2D.Linecast(
                             this._transform.position, 
                             this.groundCheck.position, 
@@ -252,7 +252,7 @@ public class PlayerController : MonoBehaviour {
            // Debug.Log("Touch the gold coin");
 			this.hud._audioSources[0].Play();
             Destroy(col.gameObject);
-			this.hud.curScore += 150;
+			this.hud.curScore += 200;
         }
 
         if (col.gameObject.CompareTag("bronzeCoins"))

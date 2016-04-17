@@ -22,16 +22,14 @@ public class BeamController2 : MonoBehaviour {
 
 		transform.position = position;
 
-		Vector2 min = Camera.main.ViewportToWorldPoint (new Vector2 (0, 0));
-
-		if (transform.position.x < min.x) {			
+		if (transform.position.x < -1123) {
 			Destroy (gameObject);
 		}
 	
 	}
 
 	void OnCollisionEnter2D(Collision2D other){
-		if (other.gameObject.CompareTag ("Ground")) {			
+		if (other.gameObject.CompareTag ("Ground")) {
 			Destroy (gameObject);
 		}
 

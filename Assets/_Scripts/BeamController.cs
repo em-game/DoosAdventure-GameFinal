@@ -22,10 +22,8 @@ public class BeamController : MonoBehaviour {
 		position = new Vector2 (position.x + this.speed, position.y);
 		transform.position = position;
 
-
-		Vector2 max = Camera.main.ViewportToWorldPoint (new Vector2 (1, 1));
-
-		if (transform.position.x > max.x) {			
+	
+		if (transform.position.x >1660) {
 			Destroy (gameObject);
 		}
 

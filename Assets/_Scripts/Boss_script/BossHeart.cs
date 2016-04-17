@@ -21,7 +21,7 @@ public class BossHeart : MonoBehaviour
         if (col.gameObject.CompareTag("Beam"))
         {
 			
-            this.hud.curScore += 250;
+            this.hud.curScore += 300;
             this.hud.curBossHeart -=1;
 			Destroy (gameObject);
 			Destroy (col.gameObject);
@@ -29,15 +29,13 @@ public class BossHeart : MonoBehaviour
         }
     }
 
-	void OnTriggerEnter2D(Collider2D col)
-	{
-		if (col.gameObject.CompareTag("Beam"))
+	void OnTriggerEnter2D(Collider2D other){
+		if (other.gameObject.CompareTag("Beam"))
 		{
-
-			this.hud.curScore += 250;
+			this.hud.curScore += 300;
 			this.hud.curBossHeart -=1;
 			Destroy (gameObject);
-			Destroy (col.gameObject);
+			Destroy (other.gameObject);
 
 		}
 	}

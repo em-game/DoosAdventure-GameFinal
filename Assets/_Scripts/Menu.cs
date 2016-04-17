@@ -40,7 +40,7 @@ public class Menu : MonoBehaviour {
         }
 
         if(!this._paused)
-        {			
+        {
             PauseUI.SetActive(false);
             Time.timeScale = 0.5f;
         }
@@ -53,8 +53,8 @@ public class Menu : MonoBehaviour {
 
     public void Restart()
     {
-		this._paused = false;
-		Time.timeScale = 0.5f;
+        //Application.LoadLevel(Application.loadedLevel);
+		Debug.Log("here");
         SceneManager.LoadScene(2);
     }
 
