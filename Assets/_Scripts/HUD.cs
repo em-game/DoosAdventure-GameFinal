@@ -128,11 +128,10 @@ public class HUD : MonoBehaviour {
 			Die ();
 		}
         // bit of adding, becaseu boss clear == game clear
-		if (this.curBossHeart <= 0 && this.curBossHeart >=-2) {
+		if (this.curBossHeart <= 0 ) {
 
             this.GameClearUI.SetActive(true);
-            this.gameClearScore.text = "Score: " + this.curScore;
-             curBossHeart = -3;
+            this.gameClearScore.text = "Score: " + this.curScore;             
             this._backSound.Stop();
             this._gameClear.Play();
            
@@ -149,7 +148,7 @@ public class HUD : MonoBehaviour {
             if (curLevel == 3)
                 {
 
-                curBossHeart -= 10;
+                curBossHeart = 0;
             }
 
       }
