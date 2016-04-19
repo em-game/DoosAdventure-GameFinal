@@ -200,6 +200,7 @@ public class PlayerController : MonoBehaviour {
 			this._transform.position = new Vector2(this.cheatKeyX, this.cheatKeyY);
 		}
     }
+  
 
     private void _flip()
     {

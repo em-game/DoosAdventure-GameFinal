@@ -27,6 +27,10 @@ public class HUD : MonoBehaviour {
 	public Text lblScore;
 	public Text lblBossHeart;
 	public Text gameOverScore;
+    //gameClearText_ and mech var
+    public Text gameClearScore;
+    public GameObject Boss;
+
 
 	//Health states and scores
 
@@ -123,14 +127,40 @@ public class HUD : MonoBehaviour {
 		if (this.curHealth <= 0) {
 			Die ();
 		}
+        // bit of adding, becaseu boss clear == game clear
+		if (this.curBossHeart <= 0 && this.curBossHeart >=-2) {
 
-		if (this.curBossHeart <= 0) {
-			this.GameClearUI.SetActive(true);
-		}
-	}
+            this.GameClearUI.SetActive(true);
+            this.gameClearScore.text = "Score: " + this.curScore;
+             curBossHeart = -3;
+            this._backSound.Stop();
+            this._gameClear.Play();
+           
 
-	// Draw Current heart depends on player's current health score
-	void DrawHUD(int curHealth)
+
+            Destroy (Boss);
+
+        }
+
+        // boss cheatkey
+
+        if (Input.GetKeyDown("f"))
+       {
+            if (curLevel == 3)
+                {
+
+                curBossHeart -= 10;
+            }
+
+      }
+
+
+
+
+    }
+
+    // Draw Current heart depends on player's current health score
+    void DrawHUD(int curHealth)
 	{
 		switch (curHealth)
 		{
@@ -182,8 +212,8 @@ public class HUD : MonoBehaviour {
 
 	public void GameClear()
 	{
-		this._backSound.Stop();
-		this._gameClear.Play();
+		//this._backSound.Stop();
+		//this._gameClear.Play();
 		//this.GameClearUI.SetActive(true);
 
 		//this.curLevel += 1;
@@ -195,10 +225,13 @@ public class HUD : MonoBehaviour {
 				SceneManager.LoadScene ("SecondLevel");
 				break;
 		case 3:
-				this.SaveData ();	
+				this.SaveData ();
+                	
 				SceneManager.LoadScene ("ThirdLevel");
 				break;
-			case 1:	
+        
+
+            case 1:	
 			default:
 				SceneManager.LoadScene ("Main");		
 				break;
