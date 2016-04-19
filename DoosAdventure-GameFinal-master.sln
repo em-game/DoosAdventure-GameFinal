@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{2AF017AE-F923-6701-BA9F-4355E1E0DD18}") = "DoosAdventure-GameFinal-master", "Assembly-CSharp.csproj", "{2CB9EBAE-A110-27B4-0319-94E06BA6BAA9}"
+EndProject
+Project("{2AF017AE-F923-6701-BA9F-4355E1E0DD18}") = "DoosAdventure-GameFinal-master", "Assembly-CSharp-Editor.csproj", "{685AB2C0-F1EB-DE88-8511-558371ABA47A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2CB9EBAE-A110-27B4-0319-94E06BA6BAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CB9EBAE-A110-27B4-0319-94E06BA6BAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CB9EBAE-A110-27B4-0319-94E06BA6BAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CB9EBAE-A110-27B4-0319-94E06BA6BAA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{685AB2C0-F1EB-DE88-8511-558371ABA47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{685AB2C0-F1EB-DE88-8511-558371ABA47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{685AB2C0-F1EB-DE88-8511-558371ABA47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{685AB2C0-F1EB-DE88-8511-558371ABA47A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
