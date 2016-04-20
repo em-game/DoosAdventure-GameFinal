@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{3615D129-25AD-1A29-81B4-A97C6C386D4F}</ProjectGuid>
+    <ProjectGuid>{2CB9EBAE-A110-27B4-0319-94E06BA6BAA9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -57,6 +57,7 @@
      <Compile Include="Assets\_Scripts\FallingTileController.cs" />
      <Compile Include="Assets\_Scripts\FrogAI.cs" />
      <Compile Include="Assets\_Scripts\FrogController.cs" />
+     <Compile Include="Assets\_Scripts\GameOver.cs" />
      <Compile Include="Assets\_Scripts\GhostAI.cs" />
      <Compile Include="Assets\_Scripts\GhostController.cs" />
      <Compile Include="Assets\_Scripts\GlobalControl.cs" />

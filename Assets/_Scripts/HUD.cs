@@ -26,7 +26,6 @@ public class HUD : MonoBehaviour {
 	public Image HeartUI_4;
 	public Text lblScore;
 	public Text lblBossHeart;
-	public Text gameOverScore;
     //gameClearText_ and mech var
     public Text gameClearScore;
     public GameObject Boss;
@@ -44,7 +43,6 @@ public class HUD : MonoBehaviour {
 	public int curBossHeart;
 
 	//Game over UI
-	public GameObject GameoverUI;
 	public GameObject GameClearUI;
 
 	//Set audio variables
@@ -103,7 +101,6 @@ public class HUD : MonoBehaviour {
 		this._frogSound = this._audioSources [9];
 		this._ghostSound = this._audioSources [10];
 
-		this.GameoverUI.SetActive(false);
 
 		if (Application.loadedLevelName == "ThirdLevel") {
 			this.lblBossHeart.gameObject.SetActive(true);
@@ -239,13 +236,16 @@ public class HUD : MonoBehaviour {
 
 	public void Die()
 	{
-		this._paused = true;		
-		this._backSound.Stop();
-		this._gameover.Play();
-		this.GameoverUI.SetActive(true);
-		this.gameOverScore.text = "Score: " + this.curScore;
-		this.gameOverScore.enabled = true;
-		this.lblBossHeart.enabled = false;
+		//this._paused = true;		
+		//this._backSound.Stop();
+		//this._gameover.Play();
+		//this.GameoverUI.SetActive(true);
+		//this.gameOverScore.text = "Score: " + this.curScore;
+		//this.gameOverScore.enabled = true;
+		//this.lblBossHeart.enabled = false;
+
+		this.SaveData ();
+		SceneManager.LoadScene ("GameOver");
 	}
 		
 	public void SaveData()
